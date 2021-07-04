@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Appointment Scheduler</string>
+    <string name="email_id_hint">Enter your email id</string>
+    <string name="pass_hint">Enter Password</string>
+    <string name="forget_pass_text">Forget Password?</string>
+    <string name="reenter_pass_hint">ReEnter Password</string>
+    <string name="some_wrong">Something went wrong!</string>
+    <string name="some_wrong_try_again">Something went wrong.!,Please try again</string>
+    <string name="try_again">Please try again</string>
+    <string name="loading">Loading…</string>
+    <string name="reset_pass_text">Reset Password</string>
+    <string name="home_label">Home</string>
+    <string name="history_label">History</string>
+    <string name="profile_label">My Profile</string>
+    <string name="setting_label">Setting</string>
+    <string name="no_upcoming_appointment_text">There is no upcoming Appointment</string>
+    <string name="also_show_text">Also show</string>
+    <string name="no_history_text">No appointment history</string>
+    <string name="permanent_code_hint">Enter Your code</string>
+    <string name="have_account_text">Do you have an account?</string>
+    <string name="sign_up_text">Don\'t have account?Sign up</string>
+    <string name="name_hint">Enter Your Name</string>
+</resources>
