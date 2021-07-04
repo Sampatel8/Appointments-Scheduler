@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_menu_nav"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.scheduleappotiment.ui.HomeFragment"
+        android:label="@string/home_label"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/eventHistoryFragment"
+        android:name="com.example.scheduleappotiment.ui.EventHistoryFragment"
+        android:label="@string/history_label"
+        tools:layout="@layout/fragment_event_history" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.scheduleappotiment.ui.ProfileFragment"
+        android:label="@string/profile_label"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.scheduleappotiment.ui.SettingFragment"
+        android:label="@string/setting_label"
+        tools:layout="@layout/fragment_setting" />
+</navigation>
