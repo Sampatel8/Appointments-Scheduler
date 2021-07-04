@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "938551050995",
+    "project_id": "appointment-47899",
+    "storage_bucket": "appointment-47899.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938551050995:android:ebeba770a9ceb56171ad86",
+        "android_client_info": {
+          "package_name": "com.example.scheduleappotiment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "938551050995-f269f31rifmpk2iliahtn80h60s9bijb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbuRz0p4FECNAfY3AEsmb_s_Ad6G5BBH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938551050995-f269f31rifmpk2iliahtn80h60s9bijb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
