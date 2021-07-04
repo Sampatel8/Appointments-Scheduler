@@ -73,6 +73,7 @@ public class LoginActivity extends BaseActivity {
             if (hasFocus) removeErrorOnInputLayout(mBinding.cpassTip);
         });
         mBinding.forgetTxt.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this,ForgetPassActivity.class));
         });
         mBinding.emailEt.addTextChangedListener(new TextWatcher() {
             @Override

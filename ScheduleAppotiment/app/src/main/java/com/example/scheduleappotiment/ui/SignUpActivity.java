@@ -251,6 +251,13 @@ public class SignUpActivity extends BaseActivity {
 
     private void editProfile() {
         Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(SignUpActivity.this, EditProfileActivity.class);
+        intent.putExtra("uid", uid);
+        intent.putExtra("code", mBinding.codeEt.getText().toString());
+        intent.putExtra("email", mBinding.emailEt.getText().toString());
+        intent.putExtra("name",mBinding.nameEt.getText().toString());
+        startActivity(intent);
+        finish();
 
     }
 

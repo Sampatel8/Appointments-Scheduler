@@ -51,6 +51,7 @@ public class HomeFragment extends Fragment {
 
     private void addListener(){
         mBinding.addFloatBtn.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(),MakeAppointment.class));
         });
     }
     private void getAppointmentList(){

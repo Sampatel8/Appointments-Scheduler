@@ -14,12 +14,15 @@
         <activity android:name=".MainActivity"
             android:theme="@style/Theme.ScheduleAppotiment.NoActionBar">
         </activity>
+        <activity android:name=".ui.ForgetPassActivity"/>
         <activity android:name=".ui.LoginActivity"
             android:theme="@style/Theme.ScheduleAppotiment.NoActionBar">
         </activity>
+        <activity android:name=".ui.MakeAppointment"
+            android:theme="@style/Theme.ScheduleAppotiment"/>
+        <activity android:name=".ui.EditProfileActivity"/>
         <activity android:name=".ui.SignUpActivity"
             android:theme="@style/Theme.ScheduleAppotiment.NoActionBar"/>
-        
         <activity android:name=".ui.SplashActivity"
             android:theme="@style/Theme.ScheduleAppotiment.NoActionBar">
             <intent-filter>
