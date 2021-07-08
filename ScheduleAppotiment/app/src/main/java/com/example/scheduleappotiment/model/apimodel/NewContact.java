@@ -13,7 +13,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
         "Id",
         "FirstName",
-        "LastName"
+        "LastName",
+        "Email",
+        "Department",
+        "User_Id__c"
 })
 public class NewContact {
 
@@ -25,6 +28,8 @@ public class NewContact {
     private String lastName;
     @JsonProperty("User_Id__c")
     private String User_Id__c;
+    @JsonProperty("Department")
+    private String Department;
 
     @JsonProperty("Email")
     private String Email;
@@ -40,6 +45,16 @@ public class NewContact {
     @JsonProperty("Id")
     public void setId(String id) {
         this.id = id;
+    }
+
+    @JsonProperty("Department")
+    public String getDepartment() {
+        return Department;
+    }
+
+    @JsonProperty("Department")
+    public void setDepartment(String department) {
+        Department = department;
     }
 
     @JsonProperty("FirstName")

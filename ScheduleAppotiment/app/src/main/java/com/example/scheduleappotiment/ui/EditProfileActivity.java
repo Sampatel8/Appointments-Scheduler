@@ -23,6 +23,7 @@ public class EditProfileActivity extends BaseActivity {
     private int genderSelectedRb=-1;
     private final int MALE=1;
     private final int FEMALE=2;
+    private String uid;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,9 @@ public class EditProfileActivity extends BaseActivity {
         intent=getIntent();
         if (getIntent().getStringExtra("email")!=null){
             mBinding.emailEt.setText(intent.getStringExtra("email"));
+        }
+        if (getIntent().getStringExtra("uid")!=null){
+            uid = intent.getStringExtra("uid");
         }
         if (intent.getStringExtra("name")!=null){
             mBinding.nameEt.setText(intent.getStringExtra("name"));

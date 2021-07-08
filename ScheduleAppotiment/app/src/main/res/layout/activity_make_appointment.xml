@@ -46,6 +46,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Title"
                 android:maxLines="4"
                 android:textAlignment="viewStart" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -64,6 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="5"
+                android:hint="Description"
                 android:maxLines="9"
                 android:textAlignment="viewStart" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -85,6 +87,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:hint="HH"
                     android:maxLength="2"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -102,6 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLength="2"
+                    android:hint="MM"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -160,6 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLength="2"
+                    android:hint="DD"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -176,6 +181,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLength="2"
+                    android:hint="MM"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -212,6 +218,7 @@
                     android:layout_width="@dimen/_70sdp"
                     android:layout_height="wrap_content"
                     android:maxLength="4"
+                    android:hint="YYYY"
                     android:maxLines="1"
                     android:textAlignment="center" />
             </com.google.android.material.textfield.TextInputLayout>

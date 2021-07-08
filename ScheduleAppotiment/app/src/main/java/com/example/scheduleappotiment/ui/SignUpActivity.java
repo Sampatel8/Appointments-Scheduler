@@ -22,11 +22,23 @@ import androidx.annotation.Nullable;
 import com.example.scheduleappotiment.BuildConfig;
 import com.example.scheduleappotiment.R;
 import com.example.scheduleappotiment.databinding.ActivityLoginBinding;
+import com.example.scheduleappotiment.model.apimodel.Contact;
+import com.example.scheduleappotiment.model.apimodel.NewContact;
+import com.example.scheduleappotiment.model.apimodel.TokenResponse;
 import com.example.scheduleappotiment.utility.BaseActivity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class SignUpActivity extends BaseActivity {
@@ -36,6 +48,8 @@ public class SignUpActivity extends BaseActivity {
     private String uid = null;
     private FirebaseUser user = null;
     private Handler handler;
+    private static String mToken;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -214,7 +228,8 @@ public class SignUpActivity extends BaseActivity {
                             user = task.getResult().getUser();
                             Toast.makeText(this, "SignUp Successful", Toast.LENGTH_LONG).show();
                             editProfile();
-                            //finish();
+                            finish();
+                            seveToSalesforce();
                            // saveOnApi();
                         } else if (task.getException() != null) {
                             Exception e = task.getException();
@@ -259,6 +274,58 @@ public class SignUpActivity extends BaseActivity {
         startActivity(intent);
         finish();
 
+    }
+
+    private void seveToSalesforce(){
+        new Thread(()->{
+
+
+            if (mToken == null) {
+                OkHttpClient client = new OkHttpClient();
+
+                MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+                RequestBody body = RequestBody.create(mediaType, "grant_type=password&client_id=3MVG9cHH2bfKACZY3qTfeMnKcfPOqHVgbOnMLjARLVdGwC4IGLvB3RDc7sUay5KzoFZ547DdWJA7ollnJSgUR&client_secret=4E09E6E0B26783BCF53AD0DC93B6F2C05ED9B159AC7D20A948191DC20B770B94&password=appointment%401235zf8kTbOISywc0dSpmmrsfb8d&username=siddharth9365%40gmail.com.appointment");
+                Request request = new Request.Builder()
+                        .url("https://login.salesforce.com/services/oauth2/token")
+                        .post(body)
+                        .addHeader("content-type", "application/x-www-form-urlencoded")
+                        .addHeader("cache-control", "no-cache")
+    //                        .addHeader("postman-token", "591102e5-f0a1-45f6-4458-a2ab72100e10")
+                        .build();
+
+                try {
+                    Response response = client.newCall(request).execute();
+                    TokenResponse response1 = new ObjectMapper().readValue(response.body().string(), TokenResponse.class);
+                    mToken = response1.getAccessToken();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            Contact contact = new Contact();
+            NewContact newContact = new NewContact();
+            newContact.setLastName(mBinding.nameEt.getText().toString());
+            newContact.setEmail(mBinding.emailEt.getText().toString());
+            newContact.setDepartment(mBinding.codeEt.getText().toString());
+            newContact.setUser_Id__c(uid);
+            contact.setContact(newContact);
+            try {
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .build();
+                MediaType mediaType = MediaType.parse("application/json");
+                String reqBody = new ObjectMapper().writeValueAsString(contact);
+                RequestBody body = RequestBody.create(mediaType, reqBody);
+                Request request = new Request.Builder()
+                        .url("https://3vision2-dev-ed.my.salesforce.com/services/apexrest/getContacts")
+                        .method("POST", body)
+                        .addHeader("Authorization", "Bearer "+mToken)
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Cookie", "BrowserId=qQK-edyREeufZpNEIvtLIQ")
+                        .build();
+                Response response = client.newCall(request).execute();
+            }catch (Exception e){
+                Log.d(TAG, "seveToSalesforce: "+e.getMessage());
+            }
+        }).start();
     }
 
 
