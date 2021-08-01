@@ -32,7 +32,7 @@ public class MainActivity extends BaseActivity {
             FirebaseCrashlytics.getInstance().recordException(e);
             mNavController=Navigation.findNavController(this,mBinding.navHostFcv.getId());
         }
-        AppBarConfiguration appBarConfiguration=new AppBarConfiguration.Builder(mNavController.getGraph()).build();
+        AppBarConfiguration appBarConfiguration=new AppBarConfiguration.Builder(R.id.homeFragment,R.id.eventHistoryFragment,R.id.profileFragment,R.id.settingFragment).build();
         //NavigationUI.setupWithNavController(mBinding.toolbarMain,mNavController,appBarConfiguration);
         NavigationUI.setupWithNavController(mBinding.bottomNavMenu,mNavController);
         NavigationUI.setupActionBarWithNavController(this,mNavController,appBarConfiguration);
