@@ -1,5 +1,7 @@
 package com.example.scheduleappotiment.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,6 +27,7 @@ public class EventHistoryFragment extends Fragment {
         super(R.layout.fragment_event_history);
     }
 
+    private Context mContext;
     private FragmentEventHistoryBinding mBinding;
     private ShowEventAdapter mAdapter;
     private ArrayList<Appointment> mainList,showList;
@@ -58,11 +61,7 @@ public class EventHistoryFragment extends Fragment {
 
     private void createMainList(){
         mainList=new ArrayList<>();
-        mainList.add(new Appointment("For Team setup","to finalize team member", CommonUtility.getTimeInMilli(25,8,2021,11,0),null, MyConstant.ATTEND_APPOINTMENT));
-        mainList.add(new Appointment("To lean app resource",CommonUtility.getTimeInMilli(7,7,2021,14,15),null,MyConstant.PENDING_APPOINTMENT));
-        mainList.add(new Appointment("Discuss meetUp",CommonUtility.getTimeInMilli(1,7,2021,11,35),null,MyConstant.CANCEL_APPOINTMENT));
-        mainList.add(new Appointment("show first Prototype",CommonUtility.getTimeInMilli(3,7,2021,13,5),null,MyConstant.REJECTED_APPOINTMENT));
-    }
+       }
 
     private void updateList(){
         if (cancelAppointment){
@@ -96,20 +95,30 @@ public class EventHistoryFragment extends Fragment {
     }
 
     private void showRvList(){
-        mBinding.loadPg.setVisibility(View.GONE);
-        if (showList!=null && showList.size()>0){
-            mBinding.eventRv.setVisibility(View.VISIBLE);
-            mBinding.noItemTv.setVisibility(View.GONE);
-            if (mAdapter!=null){
-                mAdapter.notifyDataSetChanged();
-                return;
-            }
-            mBinding.eventRv.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-            mAdapter=new ShowEventAdapter(showList);
-            mBinding.eventRv.setAdapter(mAdapter);
-            mBinding.filterLinear.setVisibility(View.VISIBLE);
-        }else hideList();
+        if (showList != null && showList.size() > 0) {
+            handler.post(() -> {
+                mBinding.eventRv.setVisibility(View.VISIBLE);
+                mBinding.noItemTv.setVisibility(View.GONE);
+                if (mAdapter != null) {
+                    mAdapter.notifyDataSetChanged();
+                    return;
+                }
+                mBinding.eventRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                mAdapter = new ShowEventAdapter(showList, mContext, position -> {
+                    Intent intent = new Intent(requireActivity(), AppointmentDetails.class);
+                    intent.putExtra("appointment", showList.get(position));
+                    startActivity(intent);
+                });
+                mBinding.eventRv.setAdapter(mAdapter);
+                mBinding.filterLinear.setVisibility(View.VISIBLE);
+            });
+        } else hideList();
+        showProgress(false);
     }
+    private void showProgress(boolean show) {
+        handler.post(() -> mBinding.loadPg.setVisibility(show ? View.VISIBLE : View.GONE));
+    }
+
 
     private void hideList(){
         mBinding.loadPg.setVisibility(View.GONE);

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    android:background="@drawable/bottom_sheet_back"
+    android:backgroundTintMode="src_over"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:paddingHorizontal="@dimen/_5sdp"
+        android:paddingVertical="@dimen/_5sdp">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CANCEL"
+            android:textAlignment="center"
+            android:textColor="@color/red"
+            android:id="@+id/date_time_cancel_btn"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/date_time_show_tv"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingHorizontal="@dimen/_3sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            android:text="12:32 PM"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DONE"
+            app:backgroundTint="@color/green_msg"
+            android:id="@+id/date_time_done_btn"/>
+    </LinearLayout>
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/date_time_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/purple_700"
+        android:paddingVertical="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginBottom="@dimen/_3sdp"/>
+
+    <CalendarView
+        android:id="@+id/date_time_calender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:alwaysDrawnWithCache="true"
+        android:datePickerMode="calendar"
+        android:elevation="@dimen/_5sdp"
+        android:forceHasOverlappingRendering="true"
+        android:overScrollMode="ifContentScrolls"
+        android:verticalScrollbarPosition="defaultPosition"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <TimePicker
+        android:id="@+id/date_time_timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:padding="@dimen/_5sdp"
+        android:visibility="gone" />
+</LinearLayout>

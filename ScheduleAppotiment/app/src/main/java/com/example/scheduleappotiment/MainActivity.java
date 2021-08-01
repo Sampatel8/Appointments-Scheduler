@@ -23,7 +23,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mBinding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
-        setSupportActionBar(mBinding.toolbarMain);
+        setSupportActionBar(mBinding.appbar.toolbarMain);
         mHostFragment= (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fcv);
         try {
             mNavController = mHostFragment.getNavController();

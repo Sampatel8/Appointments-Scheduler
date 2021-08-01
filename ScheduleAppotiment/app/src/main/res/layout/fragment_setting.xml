@@ -3,6 +3,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.SettingFragment">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/logout_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:text="@string/logout_txt"
+        app:icon="@drawable/ic_logout"
+        app:iconPadding="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_4sdp"
+        android:includeFontPadding="true"
+        android:paddingStart="@dimen/_5sdp"
+        android:background="?attr/selectableItemBackground"
+        android:textSize="22sp"
+        app:iconSize="@dimen/_22sdp"
+        app:iconGravity="start"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:iconTint="@color/red"
+        android:layout_marginHorizontal="@dimen/_4sdp"/>
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/version_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:textSize="14sp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

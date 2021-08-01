@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layout_main">
+
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/layout_appbar"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextAppearance.MaterialComponents.Body2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/_5sdp"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:text="Select Your day"
+        app:layout_constraintBottom_toTopOf="@id/day_spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintVertical_bias="0.74" />
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/day_spinner"
+        style="@style/Widget.AppCompat.Spinner.DropDown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_7sdp"
+        android:paddingVertical="2dp"
+        android:background="@drawable/layout_box"
+        app:layout_constraintBottom_toTopOf="@id/start_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintVertical_bias="0.16000003"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_goneMarginBottom="@dimen/_100sdp"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/start_tv"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_13sdp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        android:text="Start Time"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/time_slot_ll_start"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/day_spinner" />
+
+    <LinearLayout
+        android:id="@+id/time_slot_ll_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_13sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/end_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/start_tv">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:clickable="false"
+            android:enabled="true"
+            android:hint="HH"
+            android:padding="@dimen/_7sdp"
+            app:placeholderText="HH">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/start_time_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:focusable="false"
+                android:maxLength="2"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_7sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:clickable="false"
+            android:enabled="true"
+            android:hint="mm"
+            android:padding="@dimen/_7sdp"
+            app:placeholderText="HH">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/start_time_minute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:focusable="false"
+                android:maxLength="2"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_7sdp"
+            app:selectionRequired="true"
+            app:singleSelection="true"
+            android:id="@+id/start_time_toggle_btn">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/start_time_am_btn"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AM" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/start_time_pm_btn"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PM" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+        <!--<com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:padding="@dimen/_7sdp"
+            app:placeholderText="YYYY"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLength="4"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+-->
+    </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/end_tv"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_13sdp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        android:text="End Time"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/time_slot_ll_end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/time_slot_ll_start" />
+
+    <LinearLayout
+        android:id="@+id/time_slot_ll_end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_13sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/save_time_slot_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/end_tv">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:clickable="true"
+            android:enabled="true"
+            android:hint="HH"
+            android:padding="@dimen/_7sdp"
+            app:placeholderText="HH">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/end_time_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:focusable="false"
+                android:maxLength="2"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:clickable="false"
+            android:enabled="true"
+            android:hint="MM"
+            android:padding="@dimen/_7sdp"
+            app:placeholderText="MM">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/end_time_minute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:editable="true"
+                android:focusable="false"
+                android:maxLength="2"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_7sdp"
+            app:selectionRequired="true"
+            app:singleSelection="true"
+            android:id="@+id/end_time_toggle_btn">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/end_time_am_btn"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AM" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/end_time_pm_btn"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PM" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+        <!--<com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:padding="@dimen/_7sdp"
+            app:placeholderText="YYYY"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLength="4"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+-->
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/save_time_slot_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_25sdp"
+        android:enabled="false"
+        android:paddingVertical="@dimen/_10sdp"
+        android:text="SAVE"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_goneMarginTop="@dimen/_100sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/time_slot_ll_end" />
+
+    <include
+        android:id="@+id/progress_loading"
+        layout="@layout/layout_progress_indicator"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <View
+        android:id="@+id/trans_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_black"
+        android:visibility="gone"
+        android:elevation="2dp"
+        android:clickable="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/bottom_bar"
+        layout="@layout/layout_date_time"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

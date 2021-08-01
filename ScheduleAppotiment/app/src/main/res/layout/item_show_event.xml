@@ -52,48 +52,53 @@
             android:layout_marginBottom="2dp"
             android:background="@color/gray_divider"
             android:backgroundTint="@color/gray_divider" />
-        <LinearLayout
-            android:id="@+id/event_dt_linear"
-            android:layout_width="match_parent"
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/event_date_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/divider_1"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_alignStart="@id/event_title_tv"
-            android:layout_toLeftOf="@id/delete_iv">
+            android:drawableStart="@drawable/ic_event"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center_vertical"
+            android:paddingVertical="@dimen/_4sdp"
+            android:text="27-Jun-2021"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_below="@id/divider_1"/>
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/event_date_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingVertical="@dimen/_4sdp"
-                android:drawableStart="@drawable/ic_event"
-                android:text="27-Jun-2021"
-                android:gravity="center_vertical"
-                android:drawablePadding="@dimen/_5sdp"/>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/event_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_event_time"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center_vertical"
+            android:paddingVertical="@dimen/_4sdp"
+            android:text="12:27 PM"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_below="@id/event_date_tv"/>
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/event_time_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingVertical="@dimen/_4sdp"
-                android:drawableStart="@drawable/ic_event_time"
-                android:drawablePadding="@dimen/_5sdp"
-                android:gravity="center_vertical"
-                android:text="12:27 PM"/>
-        </LinearLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/event_status_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_event_time"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center_vertical"
+            android:paddingVertical="@dimen/_4sdp"
+            android:text="12:27 PM"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_below="@id/event_time_tv"/>
 
-        <androidx.appcompat.widget.AppCompatImageView
+
+        <!--<androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/delete_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_below="@id/divider_1"
+            android:layout_alignBottom="@id/event_status_tv"
+            android:layout_alignParentEnd="true"
             android:src="@drawable/ic_delete_outline"
-            app:tint="@color/red"
-            android:layout_alignTop="@id/event_dt_linear"
-            android:layout_alignBottom="@id/event_dt_linear"/>
+            app:tint="@color/red" />-->
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

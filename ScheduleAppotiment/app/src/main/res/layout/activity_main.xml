@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
+<!--
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -17,7 +17,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary"/>
-    </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>-->
+
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/layout_appbar"/>
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fcv"
         android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package com.example.scheduleappotiment.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class HomeFragment extends Fragment {
+
+    private Context mContext;
 
     public HomeFragment(){
         super(R.layout.fragment_home);
@@ -56,23 +59,26 @@ public class HomeFragment extends Fragment {
     }
     private void getAppointmentList(){
         appointmentList=new ArrayList<>();
-        appointmentList.add(new Appointment("First Appointment","To check the correct functionality", CommonUtility.getTimeInMilli(27,7,2021,11,30),null, MyConstant.UPCOMING_APPOINTMENT));
-        appointmentList.add(new Appointment("Take for project discussion",CommonUtility.getTimeInMilli(13,8,2021,13,40),null,MyConstant.UPCOMING_APPOINTMENT));
-        appointmentList.add(new Appointment("To meet up","To discuses the future project guidance",CommonUtility.getTimeInMilli(11,7,2021,10,45),null,MyConstant.UPCOMING_APPOINTMENT));
-    }
+         }
 
     private void setRecyclerView(){
-        mBinding.loadPg.setVisibility(View.GONE);
-        if (appointmentList!=null && appointmentList.size()>0){
-            mBinding.noItemTv.setVisibility(View.GONE);
-            mBinding.eventRv.setVisibility(View.VISIBLE);
-            mBinding.eventRv.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-            mAdapter=new ShowEventAdapter(appointmentList);
-            mBinding.eventRv.setAdapter(mAdapter);
-        }else{
-            mBinding.eventRv.setVisibility(View.GONE);
-            mBinding.noItemTv.setVisibility(View.VISIBLE);
-        }
+        handler.post(()->{
+            if (appointmentList!=null && appointmentList.size()>0){
+                mBinding.noItemTv.setVisibility(View.GONE);
+                mBinding.eventRv.setVisibility(View.VISIBLE);
+                mBinding.eventRv.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+                mAdapter=new ShowEventAdapter(appointmentList,mContext,position->{
+                    Intent intent=new Intent(requireActivity(),AppointmentDetails.class);
+                    intent.putExtra("appointment",appointmentList.get(position));
+                    startActivity(intent);
+                });
+                mBinding.eventRv.setAdapter(mAdapter);
+            }else{
+                mBinding.eventRv.setVisibility(View.GONE);
+                mBinding.noItemTv.setVisibility(View.VISIBLE);
+            }
+            mBinding.loadPg.setVisibility(View.GONE);
+        });
     }
 
     @Override
