@@ -19,14 +19,33 @@ import com.example.scheduleappotiment.BuildConfig;
 import com.example.scheduleappotiment.MainActivity;
 import com.example.scheduleappotiment.R;
 import com.example.scheduleappotiment.databinding.ActivityLoginBinding;
+import com.example.scheduleappotiment.model.apimodel.Contact;
+import com.example.scheduleappotiment.model.apimodel.NewContact;
+import com.example.scheduleappotiment.model.apimodel.LoginApiModel;
 import com.example.scheduleappotiment.utility.BaseActivity;
-import com.google.android.gms.common.util.CrashUtils;
+import com.example.scheduleappotiment.utility.CommonUtility;
+import com.example.scheduleappotiment.utility.MyConstant;
+import com.example.scheduleappotiment.utility.MySharedPref;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthEmailException;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.google.firebase.crashlytics.internal.model.CrashlyticsReport;
+
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginActivity extends BaseActivity {
 
@@ -34,7 +53,6 @@ public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
     private String uid=null;
     private FirebaseUser user=null;
-    public static String emailStatic;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +72,12 @@ public class LoginActivity extends BaseActivity {
         ss1.setSpan(new UnderlineSpan(),0,ss1.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mBinding.signupTxt.setText(ss1);
         mBinding.signupTxt.setVisibility(View.VISIBLE);
+        mBinding.codeTip.setVisibility(View.GONE);
     }
 
     private void addListener() {
         mBinding.loginBtn.setOnClickListener(v -> {
             if (isCanLogin()) {
-                emailStatic = mBinding.emailEt.getText().toString().trim();
                 signIn(mBinding.emailEt.getText().toString().trim(),mBinding.passEt.getText().toString().trim());
             }
         });
@@ -111,24 +129,6 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
-        mBinding.cpassEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (TextUtils.isEmpty(s.toString().trim()) && mBinding.cpassTip.isErrorEnabled()){
-                    removeErrorOnInputLayout(mBinding.cpassTip);
-                }
-            }
-        });
         mBinding.signupTxt.setOnClickListener(v->{
             startActivity(new Intent(LoginActivity.this,SignUpActivity.class));
             finish();
@@ -139,7 +139,6 @@ public class LoginActivity extends BaseActivity {
         boolean canLogin = true;
         String email = mBinding.emailEt.getText().toString().trim();
         String pass = mBinding.passEt.getText().toString().trim();
-        String code=mBinding.codeEt.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
             setErrorOnInputLayout(mBinding.emailTip, "Email id is required");
@@ -162,10 +161,6 @@ public class LoginActivity extends BaseActivity {
 //                canLogin = false;
 //            }
 //        }
-        if (TextUtils.isEmpty(code)) {
-            setErrorOnInputLayout(mBinding.cpassTip, "Code is required");
-            canLogin = false;
-        }
         return canLogin;
     }
 
@@ -181,34 +176,55 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void signIn(String email, String pass) {
+        dismiss(true);
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(task -> {
                     if (task != null) {
                         if (task.isSuccessful()) {
                             uid=task.getResult().getUser().getUid();
                             user=task.getResult().getUser();
-                            Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
-                            redirectToMain();
-                            finish();
+                            //Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
+                            //redirectToMain();
+                            //finish();
+                            getUserContact(uid);
                         } else if (task.getException() != null) {
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException){
+                                Log.d(TAG, "signIn: fail reason may be invalid password:="+task.getException().getMessage());
+                                Toast.makeText(this, "The password is invalid", Toast.LENGTH_SHORT).show();
+                                dismiss(false);
+                                return;
+                            }
                             Exception e = task.getException();
                             e.printStackTrace();
                             FirebaseCrashlytics.getInstance().log("Sign in fail..");
                             FirebaseCrashlytics.getInstance().recordException(e);
                             Log.d(TAG, "signIn: task is unsuccessful,reason:=" + e.getMessage());
-                            Toast.makeText(this, R.string.some_wrong_try_again, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(this, R.string.some_wrong_try_again, Toast.LENGTH_SHORT).show();
+                            dismiss(false);
                         } else {
                             Log.d(TAG, "signIn: task is complete with failure");
                             Toast.makeText(this, R.string.some_wrong, Toast.LENGTH_SHORT).show();
+                            dismiss(false);
                         }
                     } else {
                         Toast.makeText(this, R.string.some_wrong_try_again, Toast.LENGTH_SHORT).show();
+                        dismiss(false);
                     }
                 })
                 .addOnFailureListener(e -> {
-                    e.printStackTrace();
-                    FirebaseCrashlytics.getInstance().recordException(e);
-                    Log.d(TAG, "signIn: Fail,reason:-" + e.getMessage());
+                    if (e instanceof FirebaseAuthInvalidCredentialsException){
+                        Log.d(TAG, "signIn: fail reason may be invalid password:="+e.getMessage());
+                        Toast.makeText(this, "The password is invalid", Toast.LENGTH_SHORT).show();
+                    }else if (e instanceof FirebaseAuthInvalidUserException){
+                        Log.d(TAG, "signIn: fail reason may be invalid email id:="+e.getMessage());
+                        Toast.makeText(this, "The email address is not registered with us", Toast.LENGTH_SHORT).show();
+                    }else {
+                        e.printStackTrace();
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                        Log.d(TAG, "signIn: Fail,reason:-" + e.getMessage());
+                        Toast.makeText(this, R.string.some_wrong_try_again, Toast.LENGTH_SHORT).show();
+                    }
+                    dismiss(false);
                 });
     }
 
@@ -222,9 +238,72 @@ public class LoginActivity extends BaseActivity {
     private void redirectToMain(){
         Intent intent=new Intent(LoginActivity.this,MainActivity.class);
         intent.putExtra("uid",uid);
-        intent.putExtra("code",mBinding.codeEt.getText().toString());
+        //intent.putExtra("code",mBinding.codeEt.getText().toString());
         //intent.putExtra("email",mBinding.emailEt.getText().toString());
         startActivity(intent);
     }
 
+    private void getUserContact(String uid){
+        Log.d(TAG, "getUserContact: uid:="+uid);
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(()->{
+            OkHttpClient client = new OkHttpClient();
+            LoginApiModel model=new LoginApiModel(uid);
+            String body=null;
+            try {
+                body=new ObjectMapper().writeValueAsString(model);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            assert body != null;
+            if (MyConstant.mToken==null) CommonUtility.getBearerToken();
+            Request request = new Request.Builder()
+                    .url(MyConstant.MY_URL+"login")
+                    .post(RequestBody.create(body, MediaType.parse("application/json")))
+                    .addHeader("authorization", "Bearer "+MyConstant.mToken)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                if (response.isSuccessful()){
+                    String res=response.body().string();
+                    Contact contact=new ObjectMapper().readValue(res,Contact.class);
+                    if (contact!=null){
+                        MySharedPref pref=MySharedPref.getInstance(LoginActivity.this);
+                        pref.setContactID(contact.getId());
+                        pref.setString(MyConstant.FIRST_NAME,contact.getFirstName());
+                        pref.setString(MyConstant.LAST_NAME,contact.getLastName());
+                        pref.setBoolean(MyConstant.IS_PC,contact.getIs_PC());
+                        runOnUiThread(()->{
+                            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+                            redirectToMain();
+                            finish();
+                        });
+                    }else{
+                        runOnUiThread(()-> failLoginAPiCall(null));
+                    }
+                }else{
+                    runOnUiThread(()->failLoginAPiCall(null));
+                }
+                dismiss(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(TAG, "getUserContact: "+e.getMessage());
+                runOnUiThread(()->failLoginAPiCall(null));
+                dismiss(false);
+            }
+        });
+    }
+
+    private void failLoginAPiCall(String reason)
+    {
+        Toast.makeText(this, reason!=null?reason:getString(R.string.some_wrong_try_again), Toast.LENGTH_SHORT).show();
+        FirebaseAuth.getInstance().signOut();
+    }
+
+    private void dismiss(boolean show){
+        runOnUiThread(()->{
+            mBinding.loadPg.progressMainLl.setVisibility(show?View.VISIBLE:View.GONE);
+            mBinding.transView.setVisibility(show?View.VISIBLE:View.GONE);
+        });
+    }
 }
