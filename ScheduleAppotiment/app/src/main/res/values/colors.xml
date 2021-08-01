@@ -11,4 +11,7 @@
     <color name="green_msg">#25a244</color>
     <color name="gray_divider">#343a40</color>
     <color name="yellow_pending">#fdc500</color>
+    <color name="transparent_black">#99000000</color>
+    <color name="white_text">#f1f2f6</color>
+    <color name="second_color">#7e48e9</color>
 </resources>
