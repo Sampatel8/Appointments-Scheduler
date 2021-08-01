@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="@dimen/_4sdp"
+    app:cardCornerRadius="@dimen/_5sdp"
+    app:cardUseCompatPadding="true"
+    android:id="@+id/main_card">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingVertical="@dimen/_4sdp"
+        android:paddingHorizontal="@dimen/_7sdp"
+        android:id="@+id/ll_main">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/day_time_slot_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Weekend"
+            style="@style/TextAppearance.MaterialComponents.Headline5"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/time_time_slot_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="9 to 5"
+            android:paddingVertical="2dp"
+            style="@style/TextAppearance.MaterialComponents.Body2"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
