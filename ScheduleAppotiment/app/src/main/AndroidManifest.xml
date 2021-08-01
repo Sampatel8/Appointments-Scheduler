@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.scheduleappotiment">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,19 +11,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScheduleAppotiment">
-        <activity android:name=".MainActivity"
-            android:theme="@style/Theme.ScheduleAppotiment.NoActionBar">
-        </activity>
-        <activity android:name=".ui.ForgetPassActivity"/>
-        <activity android:name=".ui.LoginActivity"
-            android:theme="@style/Theme.ScheduleAppotiment.NoActionBar">
-        </activity>
-        <activity android:name=".ui.MakeAppointment"
-            android:theme="@style/Theme.ScheduleAppotiment"/>
-        <activity android:name=".ui.EditProfileActivity"/>
-        <activity android:name=".ui.SignUpActivity"
-            android:theme="@style/Theme.ScheduleAppotiment.NoActionBar"/>
-        <activity android:name=".ui.SplashActivity"
+        <activity android:name=".ui.AppointmentDetails"></activity>
+
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="true" />
+        <!--
+               Set to true if your app is Standalone, that is, it does not require the handheld
+               app to run.
+        -->
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
+
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.ScheduleAppotiment.NoActionBar"></activity>
+        <activity android:name=".ui.ForgetPassActivity" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:theme="@style/Theme.ScheduleAppotiment.NoActionBar"></activity>
+        <activity
+            android:name=".ui.MakeAppointment"
+            android:theme="@style/Theme.ScheduleAppotiment" />
+        <activity android:name=".ui.EditProfileActivity" />
+        <activity
+            android:name=".ui.SignUpActivity"
+            android:theme="@style/Theme.ScheduleAppotiment.NoActionBar" />
+        <activity
+            android:name=".ui.SplashActivity"
             android:theme="@style/Theme.ScheduleAppotiment.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,239 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/load_pg"
+        style="@style/Widget.MaterialComponents.LinearProgressIndicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp">
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/load_pg"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/appointment_title_ti"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:hint="Title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:placeholderText="Enter Title"
+        android:paddingHorizontal="@dimen/_10sdp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/appointment_title_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
-            style="@style/Widget.MaterialComponents.LinearProgressIndicator"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:maxLines="4"
+            android:textAlignment="viewStart" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinner"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/appointment_desc_ti"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:hint="Description"
+        app:layout_constraintTop_toBottomOf="@id/appointment_title_ti"
+        app:placeholderText="Enter Description"
+        android:paddingHorizontal="@dimen/_10sdp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/appointment_desc_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Spinner.DropDown"
-            android:paddingVertical="@dimen/_12sdp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:paddingHorizontal="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_10sdp" />
+            android:lines="2"
+            android:maxLines="9"
+            android:gravity="top" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spinner"
+        style="@style/Widget.AppCompat.Spinner.DropDown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/layout_box"
+        android:paddingHorizontal="@dimen/_4sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_5sdp"
+
+        app:layout_constraintTop_toBottomOf="@id/appointment_desc_ti" />
+
+    <LinearLayout
+        android:id="@+id/appointment_date_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_10sdp"
+        app:layout_constraintBottom_toTopOf="@id/appointment_slot_rv"
+        app:layout_constraintTop_toBottomOf="@id/spinner"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="13dp">
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
-            app:placeholderText="Enter Title">
+            android:hint="DD"
+            android:padding="@dimen/_7sdp"
+            app:placeholderText="DD">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+                android:id="@+id/appointment_day_et"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Title"
-                android:maxLines="4"
-                android:textAlignment="viewStart" />
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:maxLength="2"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
-            app:placeholderText="Enter Description">
+            android:hint="MM"
+            android:padding="@dimen/_7sdp"
+            app:placeholderText="MM">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+                android:id="@+id/appointment_month_et"
+                android:layout_width="@dimen/_55sdp"
                 android:layout_height="wrap_content"
-                android:lines="5"
-                android:hint="Description"
-                android:maxLines="9"
-                android:textAlignment="viewStart" />
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:maxLength="2"
+                android:maxLines="1"
+                android:textAlignment="center" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!--<com.google.android.material.button.MaterialButtonToggleGroup
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="@dimen/_10sdp">
+            android:layout_gravity="center_vertical"
+            app:singleSelection="true"
+            app:selectionRequired="true">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:padding="@dimen/_7sdp"
-                app:placeholderText="HH">
+                style="?attr/materialButtonOutlinedStyle"
+                android:text="AM"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="HH"
-                    android:maxLength="2"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:padding="@dimen/_7sdp"
-                app:placeholderText="MM">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLength="2"
-                    android:hint="MM"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                app:selectionRequired="true"
-                app:singleSelection="true">
-
-                <com.google.android.material.button.MaterialButton
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="AM" />
-
-                <com.google.android.material.button.MaterialButton
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PM" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-            <!--<com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:padding="@dimen/_7sdp"
-                app:placeholderText="YYYY"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLength="4"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-    -->
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+                android:text="PM"
+                style="?attr/materialButtonOutlinedStyle"/>
+        </com.google.android.material.button.MaterialButtonToggleGroup>-->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:hint="YYYY"
+            android:padding="@dimen/_7sdp"
+            android:textAlignment="center"
+            app:placeholderText="YYYY">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/appointment_year_et"
+                android:layout_width="@dimen/_70sdp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:padding="@dimen/_7sdp"
-                app:placeholderText="DD">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLength="2"
-                    android:hint="DD"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                app:placeholderText="MM"
-                android:padding="@dimen/_7sdp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLength="2"
-                    android:hint="MM"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--<com.google.android.material.button.MaterialButtonToggleGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                app:singleSelection="true"
-                app:selectionRequired="true">
-
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:text="AM"/>
-
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PM"
-                    style="?attr/materialButtonOutlinedStyle"/>
-            </com.google.android.material.button.MaterialButtonToggleGroup>-->
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:padding="@dimen/_7sdp"
-                android:textAlignment="center"
-                app:placeholderText="YYYY">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="wrap_content"
-                    android:maxLength="4"
-                    android:hint="YYYY"
-                    android:maxLines="1"
-                    android:textAlignment="center" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/appointment_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_30sdp"
-            android:layout_marginEnd="@dimen/_20sdp"
-            android:paddingVertical="@dimen/_15sdp"
-            android:text="Make Appointment"
-            android:layout_marginBottom="@dimen/_20sdp"/>
+                android:clickable="false"
+                android:editable="false"
+                android:focusable="false"
+                android:maxLength="4"
+                android:maxLines="1"
+                android:textAlignment="center" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
-</ScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/appointment_slot_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:visibility="gone"
+        android:paddingHorizontal="@dimen/_10sdp"
+        app:layout_constraintBottom_toTopOf="@id/appointment_btn"
+        app:layout_constraintTop_toBottomOf="@id/appointment_date_ll"
+        tools:listitem="@layout/item_slot" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/slot_empty_tv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:visibility="gone"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:text="@string/no_available_slot_text"
+        app:layout_constraintBottom_toTopOf="@id/appointment_btn"
+        app:layout_constraintTop_toBottomOf="@id/appointment_date_ll"
+        />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/appointment_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:paddingVertical="@dimen/_15sdp"
+        android:text="@string/appointment_txt"
+        android:paddingHorizontal="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <include
+        android:id="@+id/save_load_pg"
+        layout="@layout/layout_progress_indicator"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <View
+        android:id="@+id/trans_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:visibility="gone"
+        android:elevation="3dp"
+        android:background="@color/transparent_black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

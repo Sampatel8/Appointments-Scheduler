@@ -17,7 +17,26 @@
     <string name="also_show_text">Also show</string>
     <string name="no_history_text">No appointment history</string>
     <string name="permanent_code_hint">Enter Your code</string>
-    <string name="have_account_text">Do you have an account?</string>
+    <string name="have_account_text">Do you have an account?Login here</string>
     <string name="sign_up_text">Don\'t have account?Sign up</string>
     <string name="name_hint">Enter Your Name</string>
+    <string name="no_available_slot_text">No Available Time slot set for selected date</string>
+    <string name="select_date_for_slot">Please Select Date to see available slots</string>
+    <string name="slot_fetch_up">Please Wait…,Slots are fetching up from server</string>
+    <string name="appointment_txt">Make Appointment</string>
+    <string name="logout_txt">Logout</string>
+    <string name="show_event_time">%1$s To %2$s</string>
+    <string name="appointment_schedule_with">Your appointment schedule with  %1$s  on</string>
+    <string name="appointment_schedule_on">Your appointment schedule on</string>
+    <string-array name="time_slots_days">
+        <item>Weekend</item>
+        <item>weekdays</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
 </resources>

@@ -109,12 +109,12 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:hint="@string/name_hint"
                 android:visibility="gone">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/name_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLines="1" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/code_tip"
@@ -199,14 +199,39 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
+    <!--    <com.google.android.material.progressindicator.CircularProgressIndicator-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:id="@+id/load_pg"-->
+    <!--        android:indeterminate="true"-->
+    <!--        android:elevation="@dimen/_7sdp"-->
+    <!--        android:visibility="gone"-->
+    <!--        style="@style/Widget.MaterialComponents.CircularProgressIndicator"-->
+    <!--        android:outlineProvider="background"-->
+    <!--        app:showAnimationBehavior="outward"-->
+    <!--        app:showDelay="2"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+
+    <include
         android:id="@+id/load_pg"
-        android:indeterminate="true"
-        android:elevation="@dimen/_7sdp"
+        layout="@layout/layout_progress_indicator"
         android:visibility="gone"
-        android:backgroundTint="@color/purple_700"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <View
+        android:id="@+id/trans_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:visibility="gone"
+        android:elevation="3dp"
+        android:background="@color/transparent_black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
