@@ -39,4 +39,8 @@
         <item>Friday</item>
         <item>Saturday</item>
     </string-array>
+
+    <string name="notification_msg">
+        Your Appointment with %1$s scheduled for %2$s on %3$s at %4$s.
+    </string>
 </resources>
