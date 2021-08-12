@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -33,7 +34,7 @@ import okhttp3.Response;
 
 public class HomeFragment extends Fragment {
 
-    public HomeFragment(){
+    public HomeFragment() {
         super(R.layout.fragment_home);
     }
 
@@ -43,109 +44,124 @@ public class HomeFragment extends Fragment {
     private Handler handler;
     private static final String TAG = "HomeFragment";
     private Context mContext;
-    private boolean needToUpdate=false;
+    public static boolean needToUpdate = false;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mContext=context;
+        mContext = context;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            requireActivity().getOnBackPressedDispatcher().addCallback(this, (new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    requireActivity().finishAffinity();
+                }
+            }));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mBinding=FragmentHomeBinding.bind(view);
+        mBinding = FragmentHomeBinding.bind(view);
         mBinding.loadPg.setVisibility(View.VISIBLE);
         init();
         addListener();
         getAppointmentList();
     }
 
-    private void init(){
-        handler=new Handler(Looper.getMainLooper());
+    private void init() {
+        handler = new Handler(Looper.getMainLooper());
     }
 
-    private void addListener(){
+    private void addListener() {
         mBinding.addFloatBtn.setOnClickListener(v -> {
-            startActivity(new Intent(getActivity(),MakeAppointment.class));
-            needToUpdate=true;
+            startActivity(new Intent(getActivity(), MakeAppointment.class));
+            needToUpdate = true;
         });
     }
 
-    private void getAppointmentList(){
-        if (!CommonUtility.isEmpty(MySharedPref.getInstance(requireActivity()).getContactId())){
+    private void getAppointmentList() {
+        if (!CommonUtility.isEmpty(MySharedPref.getInstance(requireActivity()).getContactId())) {
             mBinding.loadPg.setVisibility(View.VISIBLE);
-            new Thread(()->{
-                if (MyConstant.mToken==null)CommonUtility.getBearerToken();
-            OkHttpClient client = new OkHttpClient();
+            new Thread(() -> {
+                if (MyConstant.mToken == null) CommonUtility.getBearerToken();
+                OkHttpClient client = new OkHttpClient();
 
-            Request request = new Request.Builder()
-                    .url(MyConstant.MY_URL+"appointment?contactId="+MySharedPref.getInstance(requireContext()).getContactId())
-                    .get()
-                    .addHeader("authorization", "Bearer "+MyConstant.mToken)
-                    .addHeader("content-type", "application/json")
-                    .build();
+                Request request = new Request.Builder()
+                        .url(MyConstant.MY_URL + "appointment?contactId=" + MySharedPref.getInstance(requireContext()).getContactId())
+                        .get()
+                        .addHeader("authorization", "Bearer " + MyConstant.mToken)
+                        .addHeader("content-type", "application/json")
+                        .build();
 
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.isSuccessful()){
-                    String res=response.body().string();
-                    List<Appointment> tmpList=new ObjectMapper().readValue(res,new TypeReference<List<Appointment>>(){});
-                    appointmentList=new ArrayList<>();
-                    for (Appointment app:tmpList){
-                        if (!app.getServerStatus().equals(MyConstant.STATUS_REJECTED))
-                            appointmentList.add(app);
+                try {
+                    Response response = client.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        String res = response.body().string();
+                        List<Appointment> tmpList = new ObjectMapper().readValue(res, new TypeReference<List<Appointment>>() {
+                        });
+                        appointmentList = new ArrayList<>();
+                        for (Appointment app : tmpList) {
+                            if (!app.getServerStatus().equals(MyConstant.STATUS_REJECTED))
+                                appointmentList.add(app);
+                        }
+                        setRecyclerView();
+                    } else {
+                        handler.post(() -> {
+                            Toast.makeText(mContext, "Request is failed..", Toast.LENGTH_SHORT).show();
+                        });
                     }
-                    setRecyclerView();
-                }else{
-                    handler.post(()->{Toast.makeText(mContext, "Request is failed..", Toast.LENGTH_SHORT).show();});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(TAG, "getAppointmentList: exception occurred" + e.getMessage());
+                    handler.post(() -> {
+                        mBinding.loadPg.setVisibility(View.GONE);
+                        Toast.makeText(mContext, R.string.some_wrong, Toast.LENGTH_SHORT).show();
+                    });
                 }
-            }catch (Exception e){
-                e.printStackTrace();
-                Log.d(TAG, "getAppointmentList: exception occurred"+e.getMessage());
-                handler.post(()->{
-                    mBinding.loadPg.setVisibility(View.GONE);
-                    Toast.makeText(mContext, R.string.some_wrong, Toast.LENGTH_SHORT).show();
-                });
-            }
             }).start();
-        }else {
+        } else {
             Toast.makeText(requireActivity(), R.string.some_wrong_try_again, Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void setRecyclerView(){
-        handler.post(()->{
-        if (appointmentList!=null && appointmentList.size()>0){
-            mBinding.noItemTv.setVisibility(View.GONE);
-            mBinding.eventRv.setVisibility(View.VISIBLE);
-            mBinding.eventRv.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-            mAdapter=new ShowEventAdapter(appointmentList,mContext,position->{
-                Intent intent=new Intent(requireActivity(),AppointmentDetails.class);
-                intent.putExtra("appointment",appointmentList.get(position));
-                startActivity(intent);
-            });
-            mBinding.eventRv.setAdapter(mAdapter);
-        }else{
-            mBinding.eventRv.setVisibility(View.GONE);
-            mBinding.noItemTv.setVisibility(View.VISIBLE);
-        }
-        mBinding.loadPg.setVisibility(View.GONE);
+    private void setRecyclerView() {
+        handler.post(() -> {
+            if (appointmentList != null && appointmentList.size() > 0) {
+                mBinding.noItemTv.setVisibility(View.GONE);
+                mBinding.eventRv.setVisibility(View.VISIBLE);
+                mBinding.eventRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                mAdapter = new ShowEventAdapter(appointmentList, mContext, position -> {
+                    Intent intent = new Intent(requireActivity(), AppointmentDetails.class);
+                    intent.putExtra("appointment", appointmentList.get(position));
+                    startActivity(intent);
+                });
+                mBinding.eventRv.setAdapter(mAdapter);
+            } else {
+                mBinding.eventRv.setVisibility(View.GONE);
+                mBinding.noItemTv.setVisibility(View.VISIBLE);
+            }
+            mBinding.loadPg.setVisibility(View.GONE);
         });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (appointmentList!=null && AppointmentDetails.isRescheduleSuccess){
+        if (appointmentList != null && AppointmentDetails.isRescheduleSuccess) {
             getAppointmentList();
-        }else if (needToUpdate){
+        } else if (needToUpdate) {
             getAppointmentList();
         }
-        needToUpdate=false;
+        needToUpdate = false;
     }
+
 }
