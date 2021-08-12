@@ -39,6 +39,30 @@ public class AppointmentRequest {
     private String toContactC;
     @JsonProperty("Id")
     private String Id;
+    @JsonProperty("Start_Time__c")
+    private String startTimeC;
+    @JsonProperty("End_Time__c")
+    private String endTimeC;
+
+    @JsonProperty("Start_Time__c")
+    public String getStartTimeC() {
+        return startTimeC;
+    }
+
+    @JsonProperty("Start_Time__c")
+    public void setStartTimeC(String startTimeC) {
+        this.startTimeC = startTimeC;
+    }
+
+    @JsonProperty("End_Time__c")
+    public String getEndTimeC() {
+        return endTimeC;
+    }
+
+    @JsonProperty("End_Time__c")
+    public void setEndTimeC(String endTimeC) {
+        this.endTimeC = endTimeC;
+    }
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();

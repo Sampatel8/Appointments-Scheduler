@@ -71,7 +71,7 @@ public class EditProfileActivity extends BaseActivity {
     private void setIntentData(){
         intent=getIntent();
         isEdit=intent.getBooleanExtra("isEdit",false);
-        mdp=MaterialDatePicker.Builder.datePicker().setTitleText("Select Your DOB").build();
+        mdp=MaterialDatePicker.Builder.datePicker().setTitleText("Select Your DOB").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
         if (isEdit){
             mContact=intent.getParcelableExtra("contact");
             if (!CommonUtility.isEmpty(mContact.getEmail())){
@@ -89,8 +89,8 @@ public class EditProfileActivity extends BaseActivity {
                     genderSelectedRb=FEMALE;
                 }
             }
-            if (!CommonUtility.isEmpty(mContact.getFirstName())){
-                mBinding.nameEt.setText(mContact.getFirstName());
+            if (!CommonUtility.isEmpty(mContact.getLastName())){
+                mBinding.nameEt.setText(mContact.getLastName());
             }
         }
         if (getIntent().getStringExtra("email")!=null){
@@ -105,8 +105,10 @@ public class EditProfileActivity extends BaseActivity {
         if (intent.getIntExtra("gender",-1)!=-1){
             if (intent.getIntExtra("gender",-1)==MALE){
                 mBinding.maleRb.setChecked(true);
+                genderSelectedRb=MALE;
             }else if (intent.getIntExtra("gender",-1)!=FEMALE){
                 mBinding.femaleRb.setChecked(true);
+                genderSelectedRb=FEMALE;
             }
         }
         mContactId=intent.getStringExtra("contactId");
@@ -248,13 +250,14 @@ public class EditProfileActivity extends BaseActivity {
 
     private void redirectToMain(){
         runOnUiThread(()->{
-            if (isEdit){
-                onBackPressed();
-                return;
-            }
-            Intent intent=new Intent(EditProfileActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+        if (isEdit){
+            onBackPressed();
+            return;
+        }
+        Intent intent=new Intent(EditProfileActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
         });
     }
 
@@ -265,7 +268,7 @@ public class EditProfileActivity extends BaseActivity {
             if (MyConstant.mToken==null)CommonUtility.getBearerToken();
             NewContact contactBody = new NewContact();
             Contact newContact = new Contact();
-            newContact.setFirstName(mBinding.nameEt.getText().toString());
+            newContact.setLastName(mBinding.nameEt.getText().toString());
             newContact.setGender(genderSelectedRb==MALE?"Male":"Female");
             newContact.setDob(CommonUtility.changeDateFormat("dd-MM-YYYY","YYYY-MM-dd",mBinding.dobEt.getText().toString()));
             newContact.setUser_Id__c(uid);
@@ -274,6 +277,7 @@ public class EditProfileActivity extends BaseActivity {
                 newContact.setDepartment(mContact.getDepartment());
             }else{
                 newContact.setId(mContactId);
+                newContact.setDepartment(dePartment);
             }
             contactBody.setContact(newContact);
             OkHttpClient client = new OkHttpClient();

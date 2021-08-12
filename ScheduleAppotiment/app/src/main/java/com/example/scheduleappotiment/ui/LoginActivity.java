@@ -240,6 +240,7 @@ public class LoginActivity extends BaseActivity {
         intent.putExtra("uid",uid);
         //intent.putExtra("code",mBinding.codeEt.getText().toString());
         //intent.putExtra("email",mBinding.emailEt.getText().toString());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
@@ -279,9 +280,11 @@ public class LoginActivity extends BaseActivity {
                             finish();
                         });
                     }else{
+                        Log.d(TAG, "getUserContact: contact is null");
                         runOnUiThread(()-> failLoginAPiCall(null));
                     }
                 }else{
+                    Log.d(TAG, "getUserContact: response is failed,\t"+response.body().string());
                     runOnUiThread(()->failLoginAPiCall(null));
                 }
                 dismiss(false);

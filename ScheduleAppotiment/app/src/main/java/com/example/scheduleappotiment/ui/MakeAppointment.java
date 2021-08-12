@@ -1,6 +1,7 @@
 package com.example.scheduleappotiment.ui;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +38,7 @@ import com.example.scheduleappotiment.utility.MyConstant;
 import com.example.scheduleappotiment.utility.MySharedPref;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
@@ -64,6 +69,7 @@ public class MakeAppointment extends BaseActivity {
     private MaterialDatePicker mdp;
     private Appointment mAppointment;
     private boolean isReSchedule;
+    private boolean isTeacherSlotRequestDone = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,7 +82,7 @@ public class MakeAppointment extends BaseActivity {
     }
 
     private void init() {
-        mdp = MaterialDatePicker.Builder.datePicker().setTitleText("Select Your appointment date").build();
+        mdp = MaterialDatePicker.Builder.datePicker().setTitleText("Select Your appointment date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
         mBinding.spinner.setVisibility(View.GONE);
         if (getIntent() != null) {
             isReSchedule = getIntent().getBooleanExtra("isReSchedule", false);
@@ -99,14 +105,14 @@ public class MakeAppointment extends BaseActivity {
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(CommonUtility.getTimeInMilli(mAppointment.getSlot().getDate(), "yyyy-MM-dd"));
                 mBinding.appointmentDayEt.setText(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
-                mBinding.appointmentMonthEt.setText(String.valueOf(cal.get(Calendar.MONTH)+1));
+                mBinding.appointmentMonthEt.setText(String.valueOf(cal.get(Calendar.MONTH) + 1));
                 mBinding.appointmentYearEt.setText(String.valueOf(cal.get(Calendar.YEAR)));
                 appDate = cal.getTimeInMillis();
-                getTimeSlots();
+                getTimeSlots(false);
             }
             mBinding.appointmentTitleEt.setText(mAppointment.getTitle());
             mBinding.appointmentDescEt.setText(mAppointment.getDescription());
-        } else getContacts();
+        } else if (contacts == null || contacts.size() == 0) getContacts();
     }
 
     @Override
@@ -177,7 +183,9 @@ public class MakeAppointment extends BaseActivity {
         if (list != null && list.size() > 0) {
             contacts = new ArrayList<>(list);
             String[] spinnerArray = new String[list.size() + 1];
-            spinnerArray[0] = "Select Teacher";
+            if (MySharedPref.getInstance(MakeAppointment.this).getBoolean(MyConstant.IS_PC))
+                spinnerArray[0] = "Select Student";
+            else spinnerArray[0] = "Select Teacher";
             for (int i = 1, j = 0; j < list.size(); i++, j++) {
                 spinnerArray[i] = (list.get(j).getFirstName() != null ? list.get(j).getFirstName() : "") + " " + (list.get(j).getLastName() != null ? list.get(j).getLastName() : "");
             }
@@ -213,15 +221,21 @@ public class MakeAppointment extends BaseActivity {
             makeAppointment();
             //Toast.makeText(this, "Your appointment is processed", Toast.LENGTH_SHORT).show();
         });
-        mdp.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) selection -> {
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(selection);
-            appDate = selection;
-            mBinding.appointmentDayEt.setText(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
-            mBinding.appointmentMonthEt.setText(String.valueOf(cal.get(Calendar.MONTH)+1));
-            mBinding.appointmentYearEt.setText(String.valueOf(cal.get(Calendar.YEAR)));
-            getTimeSlots();
-            mBinding.appointmentDateLl.setClickable(true);
+        mdp.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+            @Override
+            public void onPositiveButtonClick(Long selection) {
+                if (appDate != selection) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(selection);
+                    appDate = selection;
+                    mBinding.appointmentDayEt.setText(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
+                    mBinding.appointmentMonthEt.setText(String.valueOf(cal.get(Calendar.MONTH) + 1));
+                    mBinding.appointmentYearEt.setText(String.valueOf(cal.get(Calendar.YEAR)));
+                    isTeacherSlotRequestDone = false;
+                    MakeAppointment.this.getTimeSlots(false);
+                }
+                mBinding.appointmentDateLl.setClickable(true);
+            }
         });
         mdp.addOnNegativeButtonClickListener(v -> {
             appDate = 0;
@@ -279,7 +293,10 @@ public class MakeAppointment extends BaseActivity {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             if (position == 0) {
                 spinnerPos = -1;
-                Toast.makeText(MakeAppointment.this, "Please Select the Correct Teacher", Toast.LENGTH_SHORT).show();
+                if (MySharedPref.getInstance(MakeAppointment.this).getBoolean(MyConstant.IS_PC))
+                    Toast.makeText(MakeAppointment.this, "Please Select Correct Student", Toast.LENGTH_SHORT).show();
+                else Toast.makeText(MakeAppointment.this, "Please Select Correct Teacher", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MakeAppointment.this, "Please Select the Correct Teacher", Toast.LENGTH_SHORT).show();
             } else {
                 spinnerPos = position - 1;
                 mBinding.appointmentYearEt.setText("");
@@ -287,6 +304,7 @@ public class MakeAppointment extends BaseActivity {
                 mBinding.appointmentDayEt.setText("");
                 mBinding.slotEmptyTv.setText(R.string.select_date_for_slot);
                 mBinding.slotEmptyTv.setVisibility(View.VISIBLE);
+                mBinding.appointmentSlotRv.setVisibility(View.GONE);
             }
         }
 
@@ -296,7 +314,7 @@ public class MakeAppointment extends BaseActivity {
         }
     };
 
-    private void getTimeSlots() {
+    private void getTimeSlots(boolean changeId) {
         if (spinnerPos != -1 && contacts != null && contacts.size() > 0 && contacts.get(spinnerPos) != null) {
             if (appDate == 0) {
                 Toast.makeText(this, "Please Select the date", Toast.LENGTH_SHORT).show();
@@ -305,13 +323,14 @@ public class MakeAppointment extends BaseActivity {
             changeLoadPg(true);
             mBinding.slotEmptyTv.setText(R.string.slot_fetch_up);
             mBinding.slotEmptyTv.setVisibility(View.VISIBLE);
+            mBinding.appointmentSlotRv.setVisibility(View.GONE);
             mBinding.appointmentBtn.setEnabled(false);
             new Thread(() -> {
                 if (MyConstant.mToken == null) CommonUtility.getBearerToken();
 
                 OkHttpClient client = new OkHttpClient();
                 SlotRequest sr = new SlotRequest();
-                sr.setContactId(contacts.get(spinnerPos).getId());
+                sr.setContactId(changeId ? MySharedPref.getInstance(MakeAppointment.this).getContactId() : contacts.get(spinnerPos).getId());
                 sr.setAppDate(CommonUtility.getMakeAppointmentDate(appDate));
                 String req = null;
                 try {
@@ -338,8 +357,8 @@ public class MakeAppointment extends BaseActivity {
                         if (isReSchedule) {
                             if (slotList == null) slotList = new ArrayList<>();
                             slotList.add(mAppointment.getSlot());
+                            mSelectedTimeSlotPos = slotList.size() - 1;
                         }
-                        mSelectedTimeSlotPos = slotList.size() - 1;
                         setTimeSlots();
                     } else {
                         runOnUiThread(() -> {
@@ -352,11 +371,13 @@ public class MakeAppointment extends BaseActivity {
                     e.printStackTrace();
                     Log.d(TAG, "getTimeSlots: " + e.getMessage());
                     changeLoadPg(false);
-                    runOnUiThread(()->mBinding.appointmentBtn.setEnabled(true));
+                    runOnUiThread(() -> mBinding.appointmentBtn.setEnabled(true));
                 }
             }).start();
         } else {
-            Toast.makeText(this, "Please Select Teacher", Toast.LENGTH_SHORT).show();
+            if (MySharedPref.getInstance(MakeAppointment.this).getBoolean(MyConstant.IS_PC))
+                Toast.makeText(this, "Please Select Student", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(this, "Please Select Teacher", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -378,10 +399,15 @@ public class MakeAppointment extends BaseActivity {
             });
         } else {
             runOnUiThread(() -> {
-                mBinding.slotEmptyTv.setText(R.string.no_available_slot_text);
-                mBinding.slotEmptyTv.setVisibility(View.VISIBLE);
-                mBinding.appointmentSlotRv.setVisibility(View.GONE);
-                mBinding.appointmentBtn.setEnabled(true);
+                if (MySharedPref.getInstance(MakeAppointment.this).getBoolean(MyConstant.IS_PC) && !isTeacherSlotRequestDone) {
+                    getTimeSlots(true);
+                    isTeacherSlotRequestDone = true;
+                } else {
+                    mBinding.slotEmptyTv.setText(R.string.no_available_slot_text);
+                    mBinding.slotEmptyTv.setVisibility(View.VISIBLE);
+                    mBinding.appointmentSlotRv.setVisibility(View.GONE);
+                    mBinding.appointmentBtn.setEnabled(true);
+                }
                 //Toast.makeText(this, "No slot available,Please Select different Date", Toast.LENGTH_SHORT).show();
             });
         }
@@ -389,15 +415,7 @@ public class MakeAppointment extends BaseActivity {
     }
 
     private void changeLoadPg(boolean show) {
-        if (show) {
-            runOnUiThread(() -> {
-                mBinding.loadPg.setVisibility(View.VISIBLE);
-            });
-        } else {
-            runOnUiThread(() -> {
-                mBinding.loadPg.setVisibility(View.GONE);
-            });
-        }
+        runOnUiThread(() -> mBinding.loadPg.setVisibility(show ? View.VISIBLE : View.GONE));
     }
 
     private void makeAppointment() {
@@ -413,6 +431,7 @@ public class MakeAppointment extends BaseActivity {
                     appointment.setFromContactC(mAppointment.getFromContact().getId());
                     appointment.setToContactC(mAppointment.getToContact().getId());
                     appointment.setStatusC(MyConstant.STATUS_REJECTED);
+                    appointment.setId(mAppointment.getId());
                     AppointmentRequest.Request AppointmentReq = new AppointmentRequest.Request();
                     AppointmentReq.setAppointment(appointment);
 
@@ -467,26 +486,36 @@ public class MakeAppointment extends BaseActivity {
             mBinding.appointmentTitleTi.setErrorEnabled(true);
             valid = false;
         }
+        String str = "";
         if (contacts == null && spinnerPos == -1) {
-            Toast.makeText(this, "Please Select Teacher", Toast.LENGTH_SHORT).show();
+            str = "Please Select Teacher";
             valid = false;
         } else if (slotList != null && mSelectedTimeSlotPos == -1) {
-            Toast.makeText(this, "Please Select time slot", Toast.LENGTH_SHORT).show();
+            str = "Please Select time slot";
             valid = false;
         }
+        if (!valid) Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
         return valid;
     }
 
     private void processAppointment() {
         new Thread(() -> {
-            slotList.get(mSelectedTimeSlotPos).getAdditionalProperties().clear();
+            if (slotList != null && slotList.size() != 0 && slotList.size() > mSelectedTimeSlotPos)
+                slotList.get(mSelectedTimeSlotPos).getAdditionalProperties().clear();
             contacts.get(spinnerPos).getAdditionalProperties().clear();
             AppointmentRequest appointment = new AppointmentRequest();
             appointment.setName(mBinding.appointmentTitleEt.getText().toString());
             appointment.setDescriptionC(mBinding.appointmentDescEt.getText().toString());
+
             appointment.setSlotC(slotList.get(mSelectedTimeSlotPos).getId());
-            appointment.setFromContactC(MySharedPref.getInstance(MakeAppointment.this).getContactId());
-            appointment.setToContactC(contacts.get(spinnerPos).getId());
+
+            if (isReSchedule && MySharedPref.getInstance(MakeAppointment.this).getBoolean(MyConstant.IS_PC)) {
+                appointment.setFromContactC(contacts.get(spinnerPos).getId());
+                appointment.setToContactC(MySharedPref.getInstance(MakeAppointment.this).getContactId());
+            } else {
+                appointment.setFromContactC(MySharedPref.getInstance(MakeAppointment.this).getContactId());
+                appointment.setToContactC(contacts.get(spinnerPos).getId());
+            }
             if (MySharedPref.getInstance(MakeAppointment.this).getBoolean(MyConstant.IS_PC)) {
                 if (isReSchedule) appointment.setStatusC(MyConstant.STATUS_RESCHEDULE);
                 else appointment.setStatusC(MyConstant.STATUS_APPROVED);
@@ -538,11 +567,11 @@ public class MakeAppointment extends BaseActivity {
         }).start();
     }
 
-    private void showSaveProgress(boolean show){
-        runOnUiThread(()->{
-            mBinding.saveLoadPg.progressMainLl.setVisibility(show?View.VISIBLE:View.GONE);
-            mBinding.transView.setVisibility(show?View.VISIBLE:View.GONE);
+    private void showSaveProgress(boolean show) {
+        runOnUiThread(() -> {
+            mBinding.saveLoadPg.progressMainLl.setVisibility(show ? View.VISIBLE : View.GONE);
+            mBinding.transView.setVisibility(show ? View.VISIBLE : View.GONE);
         });
-
     }
+
 }

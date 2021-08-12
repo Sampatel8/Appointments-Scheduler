@@ -48,6 +48,7 @@ public class ProfileFragment extends Fragment {
     private Context mContext;
     private Contact mContact;
     private static final String TAG = "ProfileFragment";
+    private boolean isEdit=false;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -73,7 +74,7 @@ public class ProfileFragment extends Fragment {
 
     private void addListener() {
         mBinding.myTimeSlotBtn.setOnClickListener(v -> {
-
+            startActivity(new Intent(requireActivity(), MyTimeSlotActivity.class));
         });
     }
 
@@ -81,6 +82,9 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (mContact == null) getContact();
+        if (isEdit) getContact();
+
+        isEdit=false;
     }
 
     private void getContact() {
@@ -143,9 +147,9 @@ public class ProfileFragment extends Fragment {
     private void setProfile() {
         if (mContact != null) {
             mHandler.post(() -> {
-                if (!CommonUtility.isEmpty(mContact.getLastName()))
+                if (!CommonUtility.isEmpty(mContact.getFirstName()))
                     mBinding.namePtv.setText(mContact.getFirstName() + " " + mContact.getLastName());
-                else mBinding.namePtv.setText(mContact.getFirstName());
+                else mBinding.namePtv.setText(mContact.getLastName());
 
                 if (!CommonUtility.isEmpty(mContact.getDob()))
                     mBinding.dobPtv.setText(mContact.getDob());
@@ -184,6 +188,7 @@ public class ProfileFragment extends Fragment {
                 intent.putExtra("isEdit",true);
                 intent.putExtra("uid",FirebaseAuth.getInstance().getCurrentUser().getUid());
                 startActivity(intent);
+                isEdit=true;
             } else {
                 Toast.makeText(mContext, R.string.some_wrong_try_again, Toast.LENGTH_SHORT).show();
             }

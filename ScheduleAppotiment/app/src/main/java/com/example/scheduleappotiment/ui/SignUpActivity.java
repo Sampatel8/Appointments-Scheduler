@@ -175,9 +175,9 @@ public class SignUpActivity extends BaseActivity {
 
     private boolean isCanLogin() {
         boolean canLogin = true;
-        java.lang.String email = mBinding.emailEt.getText().toString().trim();
-        java.lang.String pass = mBinding.passEt.getText().toString().trim();
-        java.lang.String code = mBinding.codeEt.getText().toString().trim();
+        String email = mBinding.emailEt.getText().toString().trim();
+        String pass = mBinding.passEt.getText().toString().trim();
+        String code = mBinding.codeEt.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
             setErrorOnInputLayout(mBinding.emailTip, "Email id is required");
