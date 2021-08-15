@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -143,13 +144,15 @@ public class MakeAppointment extends BaseActivity {
                 Response response = client.newCall(request).execute();
                 Log.d(TAG, "getContacts: " + response.toString() + "\t body");
                 ObjectMapper mapper = new ObjectMapper();
-                java.lang.String body = response.body().string();
+                String body = response.body().string();
                 List<Contact> contacts = mapper.readValue(body, new TypeReference<List<Contact>>() {
                 });
                 Log.d(TAG, "getContacts: " + contacts.get(0).getFirstName());
                 setContactList(contacts);
             } catch (IOException e) {
                 e.printStackTrace();
+                changeLoadPg(false);
+                Toast.makeText(this, R.string.some_wrong_try_again, Toast.LENGTH_SHORT).show();
             }
         }).start();
         /*
@@ -226,6 +229,7 @@ public class MakeAppointment extends BaseActivity {
             public void onPositiveButtonClick(Long selection) {
                 if (appDate != selection) {
                     Calendar cal = Calendar.getInstance();
+                    cal.setTimeZone(TimeZone.getDefault());
                     cal.setTimeInMillis(selection);
                     appDate = selection;
                     mBinding.appointmentDayEt.setText(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
@@ -511,14 +515,13 @@ public class MakeAppointment extends BaseActivity {
 
             if (isReSchedule && MySharedPref.getInstance(MakeAppointment.this).getBoolean(MyConstant.IS_PC)) {
                 appointment.setFromContactC(contacts.get(spinnerPos).getId());
-                appointment.setToContactC(MySharedPref.getInstance(MakeAppointment.this).getContactId());
+                appointment.setToContactC(mAppointment.getFromContact().getId());
             } else {
                 appointment.setFromContactC(MySharedPref.getInstance(MakeAppointment.this).getContactId());
                 appointment.setToContactC(contacts.get(spinnerPos).getId());
             }
             if (MySharedPref.getInstance(MakeAppointment.this).getBoolean(MyConstant.IS_PC)) {
                 if (isReSchedule) appointment.setStatusC(MyConstant.STATUS_RESCHEDULE);
-                else appointment.setStatusC(MyConstant.STATUS_APPROVED);
             }
             AppointmentRequest.Request AppointmentReq = new AppointmentRequest.Request();
             AppointmentReq.setAppointment(appointment);

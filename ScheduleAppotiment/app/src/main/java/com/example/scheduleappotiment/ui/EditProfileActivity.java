@@ -33,6 +33,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -175,6 +176,7 @@ public class EditProfileActivity extends BaseActivity {
         });
         mdp.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) selection -> {
             Calendar calendar=Calendar.getInstance();
+            calendar.setTimeZone(TimeZone.getDefault());
             calendar.setTimeInMillis(selection);
             mBinding.dobEt.setText(CommonUtility.getDateFromTime(calendar.getTime()));
         });
@@ -270,7 +272,7 @@ public class EditProfileActivity extends BaseActivity {
             Contact newContact = new Contact();
             newContact.setLastName(mBinding.nameEt.getText().toString());
             newContact.setGender(genderSelectedRb==MALE?"Male":"Female");
-            newContact.setDob(CommonUtility.changeDateFormat("dd-MM-YYYY","YYYY-MM-dd",mBinding.dobEt.getText().toString()));
+            newContact.setDob(CommonUtility.changeDateFormat("dd-MM-yyyy","yyyy-MM-dd",mBinding.dobEt.getText().toString()));
             newContact.setUser_Id__c(uid);
             if (isEdit) {
                 newContact.setId(mContact.getId());
