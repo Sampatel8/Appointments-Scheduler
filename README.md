@@ -22,7 +22,7 @@ Password for all user is "testtest"
 
 <h2>Registration</h2>
 
-> You can register using new email ids and have to pass one premanent code which will determine your role as a user. Given permanent codes are pre inserted in the system.
+> You can register using new email ids and have to pass one permanent code which will determine your role as a user. Given permanent codes are pre inserted in the system.
 
 
 | Label |	PC Or NOT |
