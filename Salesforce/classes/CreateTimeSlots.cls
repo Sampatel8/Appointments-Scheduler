@@ -23,6 +23,7 @@ public class CreateTimeSlots {
                         slot.Day_Of_Week__c = avail.Day_Of_Week__c;
                         slot.Date__c = nowDate.addDays(-1);
                         slot.PC_Id__c = avail.PC_Id__c;
+                        slot.Availability__c = avail.Id;
                         slots.add(slot);
                     }
                 }
@@ -30,5 +31,9 @@ public class CreateTimeSlots {
             }
         }
         insert slots;
+    }
+    
+    public static void deleteSlots(List<Availability__c> avails){
+        delete [SELECT Id FROM Slot__c WHERE Availability__c IN :avails AND Is_Assigned__c = false];
     }
 }

@@ -4,7 +4,8 @@ global class InsertAvailability {
 	@HttpPost
     global static void insertAvails(List<Availability__c> avails){
         if(avails!=null){
-            insert avails;
+            upsert avails;
+            CreateTimeSlots.deleteSlots(avails);
             CreateTimeSlots.create(avails);
         }else System.debug('avils is null');
     }
