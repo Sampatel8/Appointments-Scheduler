@@ -29,8 +29,6 @@
     <string name="appointment_schedule_with">Your appointment schedule with  %1$s  on</string>
     <string name="appointment_schedule_on">Your appointment schedule on</string>
     <string-array name="time_slots_days">
-        <item>Weekend</item>
-        <item>weekdays</item>
         <item>Sunday</item>
         <item>Monday</item>
         <item>Tuesday</item>
