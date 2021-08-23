@@ -15,6 +15,7 @@ import java.util.Map;
         "Id",
         "Appointment__c",
         "Appointment__r",
+        "Tag__c",
 })
 public class Notification {
 
@@ -26,6 +27,9 @@ public class Notification {
 
     @JsonProperty("Appointment__c")
     private String appointment_c;
+
+    @JsonProperty("Tag__c")
+    private String tag;
 
     public Notification() {
     }
@@ -72,6 +76,16 @@ public class Notification {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+
+    @JsonProperty("Tag__c")
+    public String getTag() {
+        return tag;
+    }
+
+    @JsonProperty("Tag__c")
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
 

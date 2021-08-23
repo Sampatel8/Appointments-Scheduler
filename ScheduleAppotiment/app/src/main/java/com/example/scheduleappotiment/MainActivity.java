@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -13,8 +14,11 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.scheduleappotiment.databinding.ActivityMainBinding;
+import com.example.scheduleappotiment.ui.LoginActivity;
 import com.example.scheduleappotiment.ui.NotificationsActivity;
 import com.example.scheduleappotiment.utility.BaseActivity;
+import com.example.scheduleappotiment.utility.MySharedPref;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 public class MainActivity extends BaseActivity {
@@ -41,6 +45,23 @@ public class MainActivity extends BaseActivity {
         //NavigationUI.setupWithNavController(mBinding.toolbarMain,mNavController,appBarConfiguration);
         NavigationUI.setupWithNavController(mBinding.bottomNavMenu, mNavController);
         NavigationUI.setupActionBarWithNavController(this, mNavController, appBarConfiguration);
+        mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId()==R.id.settingFragment){
+                FirebaseAuth.getInstance().signOut();
+                try {
+                    Toast.makeText(this, "Logout successfully...", Toast.LENGTH_SHORT).show();
+                    MySharedPref.getInstance(MainActivity.this).removeAll();
+                    Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                    login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(login);
+                    finish();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "Some wrong,please reopen app", Toast.LENGTH_SHORT).show();
+                    finishAndRemoveTask();
+                }
+            }
+        });
     }
 
     @Override

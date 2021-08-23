@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -118,6 +119,7 @@ public class AssignTimeSlotActivity extends BaseActivity {
                 mBinding.saveTimeSlotBtn.setClickable(true);
             }
         }
+        else dayOfWeek=daysSlot[0];
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -125,14 +127,12 @@ public class AssignTimeSlotActivity extends BaseActivity {
         mBinding.daySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (isFirst) {
-                    isFirst = false;
-                } else {
+
                     dayOfWeek = daysSlot[position];
                     enableTimeSlot(true);
                     resetTimeEdit(mBinding.timeSlotLlStart.getId());
                     resetTimeEdit(mBinding.timeSlotLlEnd.getId());
-                }
+
             }
 
             @Override
@@ -214,6 +214,7 @@ public class AssignTimeSlotActivity extends BaseActivity {
 
     private void setTime() {
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getDefault());
         calendar.setTimeInMillis(timeInMilli);
         switch (mode) {
             case START_TIME:

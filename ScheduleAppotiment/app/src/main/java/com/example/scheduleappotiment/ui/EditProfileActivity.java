@@ -72,7 +72,7 @@ public class EditProfileActivity extends BaseActivity {
     private void setIntentData(){
         intent=getIntent();
         isEdit=intent.getBooleanExtra("isEdit",false);
-        mdp=MaterialDatePicker.Builder.datePicker().setTitleText("Select Your DOB").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+        mdp=MaterialDatePicker.Builder.datePicker().setTitleText("Select Your DOB").build();
         if (isEdit){
             mContact=intent.getParcelableExtra("contact");
             if (!CommonUtility.isEmpty(mContact.getEmail())){

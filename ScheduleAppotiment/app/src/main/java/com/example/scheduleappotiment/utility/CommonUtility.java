@@ -72,6 +72,7 @@ public class CommonUtility {
         if (!CommonUtility.isEmpty(time)){
             time= time.replace(".000Z","");
             @SuppressLint("SimpleDateFormat") SimpleDateFormat sfd=new SimpleDateFormat("HH:mm:ss");
+            sfd.setTimeZone(TimeZone.getDefault());
             try {
                 Date date=sfd.parse(time);
                 return timeInShowEvent(date.getTime());
@@ -186,9 +187,14 @@ public class CommonUtility {
 
     public static String getMakeAppointmentDate(long appDate) {
         try{
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            sdf.setTimeZone(TimeZone.getDefault());
             Calendar calendar = Calendar.getInstance();
+            calendar.setTimeZone(TimeZone.getDefault());
             calendar.setTimeInMillis(appDate);
+            calendar.set(Calendar.HOUR_OF_DAY,0);
+            calendar.set(Calendar.MINUTE,0);
+            calendar.set(Calendar.SECOND,20);
             return sdf.format(calendar.getTime());
         }catch (Exception e){
             e.printStackTrace();
@@ -199,7 +205,9 @@ public class CommonUtility {
     public static String changeDateFormat(String srcFormat,String destFormat,String date){
         try{
             @SuppressLint("SimpleDateFormat") SimpleDateFormat srcSDF=new SimpleDateFormat(srcFormat);
+            srcSDF.setTimeZone(TimeZone.getDefault());
             @SuppressLint("SimpleDateFormat") SimpleDateFormat destSDF=new SimpleDateFormat(destFormat);
+            destSDF.setTimeZone(TimeZone.getDefault());
             Date d=srcSDF.parse(date);
             return destSDF.format(d);
         }catch (Exception e){
@@ -211,6 +219,7 @@ public class CommonUtility {
     public static String getDateFromTime(Date time){
         try{
             @SuppressLint("SimpleDateFormat") SimpleDateFormat sdp=new SimpleDateFormat("dd-MM-yyyy");
+            sdp.setTimeZone(TimeZone.getDefault());
             return sdp.format(time);
         }catch (Exception e){
             e.printStackTrace();
@@ -221,6 +230,7 @@ public class CommonUtility {
     public static long getTimeInMilli(String date,String source){
         try{
             @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf=new SimpleDateFormat(source);
+            sdf.setTimeZone(TimeZone.getDefault());
             return sdf.parse(date).getTime();
         }catch (Exception e){
             e.printStackTrace();

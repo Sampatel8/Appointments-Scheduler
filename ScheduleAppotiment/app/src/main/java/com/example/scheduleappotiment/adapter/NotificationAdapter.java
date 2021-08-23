@@ -49,8 +49,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 item.getName(),
                 CommonUtility.getDateFromSlotObj(item.getDateC()),
                 CommonUtility.getTimeFromSlotObj(item.getStartTimeC())));
-        holder.mBinding.statusTv.setText(item.getStatusC());
-        switch (item.getStatusC()){
+        holder.mBinding.statusTv.setText(mList.get(position).getTag());
+        switch (mList.get(position).getTag()){
             case MyConstant.STATUS_APPROVED:
             case MyConstant.STATUS_RESCHEDULE:
                 holder.mBinding.statusTv.setCompoundDrawableTintList(ColorStateList.valueOf(mContext.getColor(R.color.green_msg)));

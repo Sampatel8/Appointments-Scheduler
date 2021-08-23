@@ -64,6 +64,7 @@ public class NotificationsActivity extends BaseActivity {
         showProgress(true);
         mBinding.emptyTv.setVisibility(View.VISIBLE);
         mBinding.emptyTv.setText("Fetching your notification,please wait..");
+        mBinding.notificationRv.setVisibility(View.GONE);
         if (!CommonUtility.isEmpty(MySharedPref.getInstance(NotificationsActivity.this).getContactId())) {
             new Thread(() -> {
                 if (MyConstant.mToken == null) CommonUtility.getBearerToken();
@@ -80,6 +81,7 @@ public class NotificationsActivity extends BaseActivity {
                     Response response = client.newCall(request).execute();
                     if (response.isSuccessful()) {
                         String res = response.body().string();
+                        Log.d(TAG, "getNotifications: "+res);
                         mNotificationList = new ObjectMapper().readValue(res, new TypeReference<List<Notification>>() {
                         });
                         setRecyclerView();

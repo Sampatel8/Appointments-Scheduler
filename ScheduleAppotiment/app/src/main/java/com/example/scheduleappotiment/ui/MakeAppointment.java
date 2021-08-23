@@ -83,7 +83,7 @@ public class MakeAppointment extends BaseActivity {
     }
 
     private void init() {
-        mdp = MaterialDatePicker.Builder.datePicker().setTitleText("Select Your appointment date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+        mdp = MaterialDatePicker.Builder.datePicker().setTitleText("Select Your appointment date").build();
         mBinding.spinner.setVisibility(View.GONE);
         if (getIntent() != null) {
             isReSchedule = getIntent().getBooleanExtra("isReSchedule", false);
@@ -306,6 +306,7 @@ public class MakeAppointment extends BaseActivity {
                 mBinding.appointmentYearEt.setText("");
                 mBinding.appointmentMonthEt.setText("");
                 mBinding.appointmentDayEt.setText("");
+                appDate=0;
                 mBinding.slotEmptyTv.setText(R.string.select_date_for_slot);
                 mBinding.slotEmptyTv.setVisibility(View.VISIBLE);
                 mBinding.appointmentSlotRv.setVisibility(View.GONE);
@@ -342,6 +343,7 @@ public class MakeAppointment extends BaseActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                Log.d(TAG, "getTimeSlots: req"+req+"\t appDate"+CommonUtility.getMakeAppointmentDate(appDate));
                 MediaType mediaType = MediaType.parse("application/json");
                 RequestBody body = RequestBody.create(req, mediaType);
                 Request request = new Request.Builder()
